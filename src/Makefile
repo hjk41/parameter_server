@@ -55,10 +55,11 @@ $(LIB)/libgp.a: $(GP_OBJS)
 	ar crv $@ $(GP_OBJS)
 
 ### cxxnet
+CN_ORIG_OBJS = layer_cpu.o updater_cpu.o nnet_cpu.o data.o layer_gpu.o  updater_gpu.o nnet_gpu.o
 CN_SRCS = $(addprefix cxxnet/, $(cxxnet_srcs))
 CN_OBJS = $(CN_SRCS:.cc=.o)
 $(LIB)/libcxxnet.a: $(CN_OBJS)
-	ar crv $@ $(CN_OBJS)
+	ar crv $@ $(CN_OBJS) $(addprefix ../plugin/cxxnet/, $(CN_ORIG_OBJS))
 
 CFLAGS += -I../plugin/cxxnet/src -I../plugin/cxxnet/mshadow \
 	-I/home/work/cuda-5.5/include \
@@ -77,7 +78,8 @@ DEPS = $(ALL_SRCS:.cc=.d)
 -include $(DEPS)
 
 ### rules
-LIBS = $(LIB)/liblm.a $(LIB)/libgp.a $(LIB)/libcxxnet.a $(LIB)/libps.a
+LIBS = $(LIB)/liblm.a $(LIB)/libgp.a $(LIB)/libcxxnet.a \
+ $(LIB)/libps.a
 
 test: $(addprefix $(BIN)/, $(TESTS))
 %.o: %.cc
