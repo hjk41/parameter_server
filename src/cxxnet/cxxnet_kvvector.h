@@ -1,5 +1,5 @@
 #pragma once
-#include "shared_parameter/kv_vector.h"
+#include "parameter/kv_vector.h"
 namespace PS {
 namespace CXXNET {
 

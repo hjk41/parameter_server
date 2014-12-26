@@ -1,4 +1,4 @@
-#progma once
+#pragma once
 #include "cxxnet/cxxnet.h"
 namespace PS {
 namespace CXXNET {
