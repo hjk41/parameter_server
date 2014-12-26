@@ -32,7 +32,7 @@ clean:
 	rm -rf */*.o */*.d */*/*.o */*/*.d proto/*.cc $(BIN) $(LIB)
 
 -include */BUILD
-# system
+### system
 SYS_SRCS = $(PROTOS_CC) \
 	$(addprefix system/, $(system_srcs)) \
 	$(addprefix util/, $(util_srcs)) \
@@ -42,27 +42,42 @@ SYS_OBJS = $(SYS_SRCS:.cc=.o)
 $(LIB)/libps.a: $(SYS_OBJS)
 	ar crv $@ $(SYS_OBJS)
 
-# linear methods
+### linear methods
 LM_SRCS = $(addprefix linear_method/, $(linear_method_srcs))
 LM_OBJS = $(LM_SRCS:.cc=.o)
 $(LIB)/liblm.a: $(LM_OBJS)
 	ar crv $@ $(LM_OBJS)
 
-# graph partitioning
+### graph partitioning
 GP_SRCS = $(addprefix graph_partition/, $(graph_partition_srcs))
 GP_OBJS = $(GP_SRCS:.cc=.o)
 $(LIB)/libgp.a: $(GP_OBJS)
 	ar crv $@ $(GP_OBJS)
 
-# cxxnet
+### cxxnet
+CN_SRCS = $(addprefix cxxnet/, $(cxxnet_srcs))
+CN_OBJS = $(CN_SRCS:.cc=.o)
+$(LIB)/libcxxnet.a: $(CN_OBJS)
+	ar crv $@ $(CN_OBJS)
 
-# dependencies
+CFLAGS += -I../plugin/cxxnet/src -I../plugin/cxxnet/mshadow \
+	-I/home/work/cuda-5.5/include \
+	-msse3 -Wno-unknown-pragmas -funroll-loops -fopenmp \
+	-DCXXNET_USE_OPENCV=1 -I/home/limu/include \
+	-DMSHADOW_USE_MKL=0 -DMSHADOW_USE_CBLAS=1
+
+LDFLAGS += -L/usr/lib64/atlas/ -lcblas \
+	`pkg-config --cflags --libs opencv` \
+	-L/home/work/cuda-5.5/lib64 -lcudart -lcublas -lcurand
+
+### dependencies
 # $(SRCS) $(addsuffix .cc, $(addprefix test/, $(TESTS)))
 ALL_SRCS = $(wildcard */*.cc)
 DEPS = $(ALL_SRCS:.cc=.d)
 -include $(DEPS)
 
-LIBS = $(LIB)/liblm.a $(LIB)/libgp.a $(LIB)/libps.a
+### rules
+LIBS = $(LIB)/liblm.a $(LIB)/libgp.a $(LIB)/libcxxnet.a $(LIB)/libps.a
 
 test: $(addprefix $(BIN)/, $(TESTS))
 %.o: %.cc
@@ -79,7 +94,7 @@ $(BIN)/%: test/%.cc $(LIBS)
 $(BIN)/ps: main.cc $(LIBS)
 	$(CC) $(CFLAGS) main.cc $(LIBS) $(LDFLAGS) -o $@
 
-# make directories
+### make directories
 dir: $(LIB) $(BIN)
 $(LIB):
 	mkdir -p $(LIB)

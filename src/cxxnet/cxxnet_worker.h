@@ -5,20 +5,17 @@ namespace CXXNET {
 
 class CxxnetWorker : public Cxxnet {
  public:
-  virtual void init() {
-    cxxnet::init();
-  }
-
+  virtual void init() { Cxxnet::init(); }
   virtual void process(const MessagePtr& msg) {
     auto cmd = get(msg).cmd();
     if (cmd == Call::RUN) {
-#ifdef CXXNET_PS
-      char* args[1];
-      args[0] = conf_.args().data();
-      tsk.Run(1, args);
-#else
-      CHECK(false);
-#endif // CXXNET_PS
+// #ifdef CXXNET_PS
+//       char* args[1];
+//       args[0] = conf_.args().data();
+//       tsk.Run(1, args);
+// #else
+//       CHECK(false);
+// #endif // CXXNET_PS
     }
   }
 };

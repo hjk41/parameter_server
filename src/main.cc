@@ -6,21 +6,24 @@ DEFINE_bool(log_instant, false, "disable buffer of glog");
 #include "system/app.h"
 #include "linear_method/linear_method.h"
 #include "graph_partition/graph_partition.h"
+#include "cxxnet/cxxnet.h"
 namespace PS {
 
 AppPtr App::create(const AppConfig& conf) {
+  // create the application
   AppPtr ptr;
   if (conf.has_linear_method()) {
     ptr = LM::LinearMethod::create(conf.linear_method());
     CHECK(ptr);
-  // } else if (conf.has_neural_network()) {
-  //   ptr = AppPtr(new NN::SGDSolver());
   } else if (conf.has_graph_partition()) {
     ptr = GP::GraphPartition::create(conf.graph_partition());
+  } else if (conf.has_cxxnet()) {
+    ptr = CXXNET::Cxxnet::create(conf.cxxnet());
   } else {
     CHECK(false) << "unknown app: " << conf.DebugString();
   }
 
+  // set configuration
   CHECK(conf.has_app_name());
   ptr->name_ = conf.app_name();
   for (int i = 0; i < conf.parameter_name_size(); ++i) {

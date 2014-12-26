@@ -1,15 +1,13 @@
 #pragma once
 #include "system/app.h"
+#include "mshadow/tensor.h"
+#include "global.h"
+#include "cxxnet_main.h"
+
 namespace PS {
 namespace CXXNET {
 
-#ifdef CXXNET_PS
-#include "../plugin/cxxnet/global.h"
-#include "../plugin/cxxnet/cxxnet_main.h"
 typedef cxxnet::real_t real_t;
-#else
-typedef float real_t;
-#endif // CXXNET_PS
 
 class Cxxnet : public App {
  public:
@@ -33,7 +31,7 @@ class Cxxnet : public App {
     conf_ = app_cf_.cxxnet();
   }
   virtual void run() { }
-  // virtual void process(const MessagePtr& msg) { }
+  virtual void process(const MessagePtr& msg) { }
  protected:
   Config conf_;
 };

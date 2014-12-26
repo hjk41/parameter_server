@@ -1,4 +1,5 @@
 #include "cxxnet/cxxnet_scheduler.h"
+#include "system/postmaster.h"
 namespace PS {
 namespace CXXNET {
 
