@@ -59,9 +59,14 @@ void KVVector<K,V>::setValue(const MessagePtr& msg) {
     my_val = new_val;
   } else {
     // match the received data according to my keys
-    size_t n = parallelOrderedMatch<K,V,OpPlus<V>>(
-        recv_key, recv_val, my_key, &my_val);
-    CHECK_EQ(n, recv_key.size());
+    if (my_key.empty() && my_val.empty()) {
+      my_key = recv_key;
+      my_val = recv_val;
+    } else {
+      size_t n = parallelOrderedMatch<K,V,OpPlus<V>>(
+          recv_key, recv_val, my_key, &my_val);
+      CHECK_EQ(n, recv_key.size());
+    }
   }
 }
 

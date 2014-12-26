@@ -33,6 +33,7 @@
 #include "linear_method/linear_method.pb.h"
 #include "graph_partition/graph_partition.pb.h"
 #include "parameter/shared_parameter.pb.h"
+#include "cxxnet/cxxnet.pb.h"
 // @@protoc_insertion_point(includes)
 
 namespace PS {
@@ -387,6 +388,15 @@ class Task : public ::google::protobuf::Message {
   inline ::PS::GP::Call* release_graph_partition();
   inline void set_allocated_graph_partition(::PS::GP::Call* graph_partition);
 
+  // optional .PS.CXXNET.Call cxxnet = 304;
+  inline bool has_cxxnet() const;
+  inline void clear_cxxnet();
+  static const int kCxxnetFieldNumber = 304;
+  inline const ::PS::CXXNET::Call& cxxnet() const;
+  inline ::PS::CXXNET::Call* mutable_cxxnet();
+  inline ::PS::CXXNET::Call* release_cxxnet();
+  inline void set_allocated_cxxnet(::PS::CXXNET::Call* cxxnet);
+
   // @@protoc_insertion_point(class_scope:PS.Task)
  private:
   inline void set_has_type();
@@ -421,6 +431,8 @@ class Task : public ::google::protobuf::Message {
   inline void clear_has_sketch();
   inline void set_has_graph_partition();
   inline void clear_has_graph_partition();
+  inline void set_has_cxxnet();
+  inline void clear_has_cxxnet();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -442,10 +454,11 @@ class Task : public ::google::protobuf::Message {
   ::PS::LM::Call* linear_method_;
   ::PS::CallSketch* sketch_;
   ::PS::GP::Call* graph_partition_;
+  ::PS::CXXNET::Call* cxxnet_;
   int key_type_;
 
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(19 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(20 + 31) / 32];
 
   friend void  protobuf_AddDesc_proto_2ftask_2eproto();
   friend void protobuf_AssignDesc_proto_2ftask_2eproto();
@@ -1574,6 +1587,44 @@ inline void Task::set_allocated_graph_partition(::PS::GP::Call* graph_partition)
     set_has_graph_partition();
   } else {
     clear_has_graph_partition();
+  }
+}
+
+// optional .PS.CXXNET.Call cxxnet = 304;
+inline bool Task::has_cxxnet() const {
+  return (_has_bits_[0] & 0x00080000u) != 0;
+}
+inline void Task::set_has_cxxnet() {
+  _has_bits_[0] |= 0x00080000u;
+}
+inline void Task::clear_has_cxxnet() {
+  _has_bits_[0] &= ~0x00080000u;
+}
+inline void Task::clear_cxxnet() {
+  if (cxxnet_ != NULL) cxxnet_->::PS::CXXNET::Call::Clear();
+  clear_has_cxxnet();
+}
+inline const ::PS::CXXNET::Call& Task::cxxnet() const {
+  return cxxnet_ != NULL ? *cxxnet_ : *default_instance_->cxxnet_;
+}
+inline ::PS::CXXNET::Call* Task::mutable_cxxnet() {
+  set_has_cxxnet();
+  if (cxxnet_ == NULL) cxxnet_ = new ::PS::CXXNET::Call;
+  return cxxnet_;
+}
+inline ::PS::CXXNET::Call* Task::release_cxxnet() {
+  clear_has_cxxnet();
+  ::PS::CXXNET::Call* temp = cxxnet_;
+  cxxnet_ = NULL;
+  return temp;
+}
+inline void Task::set_allocated_cxxnet(::PS::CXXNET::Call* cxxnet) {
+  delete cxxnet_;
+  cxxnet_ = cxxnet;
+  if (cxxnet) {
+    set_has_cxxnet();
+  } else {
+    clear_has_cxxnet();
   }
 }
 

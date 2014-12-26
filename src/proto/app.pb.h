@@ -27,6 +27,7 @@
 #include "proto/neural_network.pb.h"
 #include "linear_method/linear_method.pb.h"
 #include "graph_partition/graph_partition.pb.h"
+#include "cxxnet/cxxnet.pb.h"
 // @@protoc_insertion_point(includes)
 
 namespace PS {
@@ -149,6 +150,15 @@ class AppConfig : public ::google::protobuf::Message {
   inline ::PS::GP::Config* release_graph_partition();
   inline void set_allocated_graph_partition(::PS::GP::Config* graph_partition);
 
+  // optional .PS.CXXNET.Config cxxnet = 6;
+  inline bool has_cxxnet() const;
+  inline void clear_cxxnet();
+  static const int kCxxnetFieldNumber = 6;
+  inline const ::PS::CXXNET::Config& cxxnet() const;
+  inline ::PS::CXXNET::Config* mutable_cxxnet();
+  inline ::PS::CXXNET::Config* release_cxxnet();
+  inline void set_allocated_cxxnet(::PS::CXXNET::Config* cxxnet);
+
   // @@protoc_insertion_point(class_scope:PS.AppConfig)
  private:
   inline void set_has_app_name();
@@ -159,6 +169,8 @@ class AppConfig : public ::google::protobuf::Message {
   inline void clear_has_neural_network();
   inline void set_has_graph_partition();
   inline void clear_has_graph_partition();
+  inline void set_has_cxxnet();
+  inline void clear_has_cxxnet();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -167,9 +179,10 @@ class AppConfig : public ::google::protobuf::Message {
   ::PS::LM::Config* linear_method_;
   ::PS::NN::Config* neural_network_;
   ::PS::GP::Config* graph_partition_;
+  ::PS::CXXNET::Config* cxxnet_;
 
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(5 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(6 + 31) / 32];
 
   friend void  protobuf_AddDesc_proto_2fapp_2eproto();
   friend void protobuf_AssignDesc_proto_2fapp_2eproto();
@@ -410,6 +423,44 @@ inline void AppConfig::set_allocated_graph_partition(::PS::GP::Config* graph_par
     set_has_graph_partition();
   } else {
     clear_has_graph_partition();
+  }
+}
+
+// optional .PS.CXXNET.Config cxxnet = 6;
+inline bool AppConfig::has_cxxnet() const {
+  return (_has_bits_[0] & 0x00000020u) != 0;
+}
+inline void AppConfig::set_has_cxxnet() {
+  _has_bits_[0] |= 0x00000020u;
+}
+inline void AppConfig::clear_has_cxxnet() {
+  _has_bits_[0] &= ~0x00000020u;
+}
+inline void AppConfig::clear_cxxnet() {
+  if (cxxnet_ != NULL) cxxnet_->::PS::CXXNET::Config::Clear();
+  clear_has_cxxnet();
+}
+inline const ::PS::CXXNET::Config& AppConfig::cxxnet() const {
+  return cxxnet_ != NULL ? *cxxnet_ : *default_instance_->cxxnet_;
+}
+inline ::PS::CXXNET::Config* AppConfig::mutable_cxxnet() {
+  set_has_cxxnet();
+  if (cxxnet_ == NULL) cxxnet_ = new ::PS::CXXNET::Config;
+  return cxxnet_;
+}
+inline ::PS::CXXNET::Config* AppConfig::release_cxxnet() {
+  clear_has_cxxnet();
+  ::PS::CXXNET::Config* temp = cxxnet_;
+  cxxnet_ = NULL;
+  return temp;
+}
+inline void AppConfig::set_allocated_cxxnet(::PS::CXXNET::Config* cxxnet) {
+  delete cxxnet_;
+  cxxnet_ = cxxnet;
+  if (cxxnet) {
+    set_has_cxxnet();
+  } else {
+    clear_has_cxxnet();
   }
 }
 

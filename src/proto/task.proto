@@ -7,6 +7,7 @@ import "proto/common.proto";
 import "linear_method/linear_method.proto";
 import "graph_partition/graph_partition.proto";
 import "parameter/shared_parameter.proto";
+import "cxxnet/cxxnet.proto";
 
 message Task {
   enum Type {
@@ -53,6 +54,7 @@ message Task {
   optional CallSketch sketch = 302;
 
   optional GP.Call graph_partition = 303;
+  optional CXXNET.Call cxxnet = 304;
 }
 
 message ManageNode {

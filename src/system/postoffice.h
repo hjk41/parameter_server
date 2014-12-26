@@ -5,11 +5,10 @@
 #include "system/heartbeat_info.h"
 #include "util/threadsafe_queue.h"
 #include "dashboard.h"
-namespace PS {
-
 #define REGISTER_CUSTOMER(name, customer)                               \
   customer->setName(name);                                              \
-  Postoffice::instance().yp().add(std::static_pointer_cast<Customer>(customer));
+  PS::Postoffice::instance().yp().add(std::static_pointer_cast<PS::Customer>(customer));
+namespace PS {
 
 DECLARE_int32(num_servers);
 DECLARE_int32(num_workers);
