@@ -24,6 +24,7 @@ void CxxnetScheduler::run() {
   // start the system
   sch.createApp(nodes, apps);
 
+
   // run
   Task run = newTask(Call::RUN);
   taskpool(kActiveGroup)->submitAndWait(run);

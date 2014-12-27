@@ -118,6 +118,7 @@ MessagePtrList sliceKeyOrderedMsg(const MessagePtr& msg, const KeyList& sep) {
   std::vector<size_t> pos; pos.reserve(n-1);
   SArray<K> key(msg->key);
   Range<K> msg_key_range(msg->task.key_range());
+  CHECK(msg_key_range.valid()) << msg_key_range;
   for (auto p : sep) {
     K k = std::max(msg_key_range.begin(), std::min(msg_key_range.end(), (K)p));
     pos.push_back(std::lower_bound(key.begin(), key.end(), k) - key.begin());

@@ -106,6 +106,7 @@ void Postoffice::reply(
 
 void Postoffice::queue(const MessagePtr& msg) {
   if (msg->valid) {
+    // LL << msg->debugString();
     sending_queue_.push(msg);
   } else {
     // do not send, fake a reply mesage
@@ -190,7 +191,6 @@ void Postoffice::manageApp(const Task& tk) {
 }
 
 void Postoffice::manageNode(const Task& tk) {
-
   CHECK(tk.has_mng_node());
   auto& mng = tk.mng_node();
   std::vector<Node> nodes;

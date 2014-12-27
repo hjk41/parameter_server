@@ -29,6 +29,7 @@ class Cxxnet : public App {
 
   virtual void init() {
     conf_ = app_cf_.cxxnet();
+    LL << conf_.DebugString();
   }
   virtual void run() { }
   virtual void process(const MessagePtr& msg) { }

@@ -1,6 +1,6 @@
 CC = g++
-# OPT = -O0 -ggdb
-OPT = -O3 -ggdb
+OPT = -O0 -ggdb
+# OPT = -O3 -ggdb
 
 BIN = ../bin
 LIB = ../lib
@@ -55,11 +55,13 @@ $(LIB)/libgp.a: $(GP_OBJS)
 	ar crv $@ $(GP_OBJS)
 
 ### cxxnet
-CN_ORIG_OBJS = layer_cpu.o updater_cpu.o nnet_cpu.o data.o layer_gpu.o  updater_gpu.o nnet_gpu.o
+CN_ORIG_O = layer_cpu.o updater_cpu.o nnet_cpu.o data.o layer_gpu.o  updater_gpu.o nnet_gpu.o
+CN_ORIG_OBJS = $(addprefix ../plugin/cxxnet/, $(CN_ORIG_O))
 CN_SRCS = $(addprefix cxxnet/, $(cxxnet_srcs))
+
 CN_OBJS = $(CN_SRCS:.cc=.o)
-$(LIB)/libcxxnet.a: $(CN_OBJS)
-	ar crv $@ $(CN_OBJS) $(addprefix ../plugin/cxxnet/, $(CN_ORIG_OBJS))
+$(LIB)/libcxxnet.a: $(CN_OBJS) $(CN_ORIG_OBJS)
+	ar crv $@ $(CN_OBJS) $(CN_ORIG_OBJS)
 
 CFLAGS += -I../plugin/cxxnet/src -I../plugin/cxxnet/mshadow \
 	-I/home/work/cuda-5.5/include \

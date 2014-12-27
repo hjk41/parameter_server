@@ -7,15 +7,14 @@ void SyncWorker::Init(size_t w_size, size_t b_size) {
   w_size_ = w_size;
   b_size_ = b_size;
 
-  ps_ = new SyncData();
-  ps_->sync_ = KVVectorPtr<int, real_t>(new KVVector<int, real_t>());
-  REGISTER_CUSTOMER("fc"+std::to_string(layer_id), ps_->sync_);
-
-
   auto n = w_size + b_size;
-  ps_->keys_.resize(n);
+
+  auto p = new KVVector<uint32, real_t>();
+  ps_ = new SyncData(p, n);
+  string name = "fc" + std::to_string(layer_id++);
+  // TODO I should read the name from the configure file
+  REGISTER_CUSTOMER_WITH_PARENT(name, ps_->sync_, "mnist_fullc");
   for (int i = 0; i < n; ++i) ps_->keys_[i] = i;
-  ps_->buf_.resize(n);
   last_pull_time_ = -1;
 }
 void SyncWorker::Push(real_t const* gwmat, real_t const* gbias) {

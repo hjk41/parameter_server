@@ -5,10 +5,8 @@
 #include "system/heartbeat_info.h"
 #include "util/threadsafe_queue.h"
 #include "dashboard.h"
-#define REGISTER_CUSTOMER(name, customer)                               \
-  customer->setName(name);                                              \
-  PS::Postoffice::instance().yp().add(std::static_pointer_cast<PS::Customer>(customer));
 namespace PS {
+
 
 DECLARE_int32(num_servers);
 DECLARE_int32(num_workers);
@@ -16,6 +14,21 @@ DECLARE_int32(num_unused);
 DECLARE_int32(num_replicas);
 DECLARE_string(node_file);
 DECLARE_string(app);
+
+// called when register a customer in Init()
+#define REGISTER_CUSTOMER(name, customer)                               \
+  customer->setName(name);                                              \
+  PS::Postoffice::instance().yp().add(std::static_pointer_cast<PS::Customer>(customer));
+
+// called after Init(), this customer needs to get all node information from its parent
+#define REGISTER_CUSTOMER_WITH_PARENT(name, customer_ptr, parent_name)      \
+  REGISTER_CUSTOMER(name, customer_ptr);                                    \
+  auto parent_ptr = PS::Postoffice::instance().yp().customer(parent_name); \
+  CHECK(parent_ptr) << parent_name;                                          \
+  parent_ptr->addChild(name);                                       \
+  auto child_ptr =  PS::Postoffice::instance().yp().customer(name);     \
+  CHECK(child_ptr) << name;                                             \
+  child_ptr->exec().init(parent_ptr->exec().nodes());
 
 class Postoffice {
  public:

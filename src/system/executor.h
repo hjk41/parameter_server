@@ -67,6 +67,14 @@ class Executor {
   // bool isServer() { return my_node_.role() == Node::SERVER; }
 
   // maintain nodes
+  std::vector<Node> nodes() {
+    std::vector<Node> ret;
+    for (const auto& n : nodes_) {
+      auto d = n.second->node_;
+      if (d.role() != Node::GROUP) ret.push_back(d);
+    }
+    return ret;
+  }
   void add(const Node& node);
   // (somewhat) thread-safe, will called by postoffice's recving thread
   void replace(const Node& dead, const Node& live);
