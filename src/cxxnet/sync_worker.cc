@@ -3,7 +3,7 @@
 namespace PS {
 namespace CXXNET {
 
-void SyncWorker::Init(size_t w_size, size_t b_size) {
+void SyncWorker::init(size_t w_size, size_t b_size) {
   w_size_ = w_size;
   b_size_ = b_size;
 
@@ -17,7 +17,7 @@ void SyncWorker::Init(size_t w_size, size_t b_size) {
   for (int i = 0; i < n; ++i) ps_->keys_[i] = i;
   last_pull_time_ = -1;
 }
-void SyncWorker::Push(real_t const* gwmat, real_t const* gbias) {
+void SyncWorker::push(real_t const* gwmat, real_t const* gbias) {
   // push the gradient to servers
   MessagePtr push(new Message(kServerGroup, last_pull_time_+1));
   push->setKey(ps_->keys_);
@@ -28,6 +28,7 @@ void SyncWorker::Push(real_t const* gwmat, real_t const* gbias) {
     memcpy(ps_->buf_.data() + w_size_, gbias, b_size_ * sizeof(real_t));
   }
   push->addValue(ps_->buf_);
+  ps_->sync_->value(0).setZero();
   ps_->sync_->push(push);
 
   // pull the weight
@@ -37,7 +38,7 @@ void SyncWorker::Push(real_t const* gwmat, real_t const* gbias) {
   last_pull_time_ = ps_->sync_->pull(pull);
 }
 
-void SyncWorker::Pull(real_t* gwmat, real_t* gbias) {
+void SyncWorker::pull(real_t* gwmat, real_t* gbias) {
   ps_->sync_->waitOutMsg(kServerGroup, last_pull_time_);
   auto global_grad = ps_->sync_->value(0);
 

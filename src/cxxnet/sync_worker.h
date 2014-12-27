@@ -12,9 +12,9 @@ typedef mshadow::real_t real_t;
 class SyncWorker {
  public:
   SyncWorker() : ps_(NULL) { }
-  void Init(size_t w_size, size_t b_size);
-  void Push(real_t const* gwmat, real_t const* gbias);
-  void Pull(real_t* gwmat, real_t* gbias);
+  void init(size_t w_size, size_t b_size);
+  void push(real_t const* gwmat, real_t const* gbias);
+  void pull(real_t* gwmat, real_t* gbias);
  private:
   size_t w_size_, b_size_;
   SyncData* ps_;
