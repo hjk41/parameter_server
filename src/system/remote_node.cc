@@ -90,6 +90,14 @@ bool RNode::tryWaitIncomingTask(int time) {
   return true;
 }
 
+
+int RNode::countIncomingTask(int time) {
+  int ret = 0;
+  for (auto& w : exec_.group(id()))
+    if (w->incoming_task_.tryWait(time)) ++ ret;
+  return ret;
+}
+
 void RNode::finishIncomingTask(int time) {
   for (auto& w : exec_.group(id())) w->incoming_task_.finish(time);
   exec_.notify();

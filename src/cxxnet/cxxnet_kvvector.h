@@ -14,7 +14,10 @@ class CxxnetKVVector : public KVVector<K, V> {
 
     KVVector<K,V>::setValue(msg);
 
-    if (this->taskpool(kWorkerGroup)->tryWaitIncomingTask(time)) {
+    // we need to -1 here because the current task will be finished after
+    // exitting this function
+    if (this->taskpool(kWorkerGroup)->countIncomingTask(time) ==
+        FLAGS_num_workers - 1) {
       // aggregated the gradients from all workers, allow for pulling now
       this->taskpool(kWorkerGroup)->finishIncomingTask(time+1);
     }

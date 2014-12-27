@@ -69,6 +69,8 @@ class RNode {
   void finishOutgoingTask(int time);
   void finishIncomingTask(int time);
 
+  int countIncomingTask(int time);
+
   int time() { Lock l(mu_); return time_; }
 
   // memory usage in bytes
