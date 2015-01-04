@@ -13,10 +13,10 @@ class CxxnetServer : public Cxxnet {
     layers_.resize(2);
     layers_[0] = SharedParameterPtr<int>(new CxxnetKVVector<int, real_t>());
     layers_[1] = SharedParameterPtr<int>(new CxxnetKVVector<int, real_t>());
-    REGISTER_CUSTOMER("fc1", layers_[0]);
-    REGISTER_CUSTOMER("fc2", layers_[1]);
-    this->addChild("fc1");
-    this->addChild("fc2");
+    REGISTER_CUSTOMER("layer_1", layers_[0]);
+    REGISTER_CUSTOMER("layer_1", layers_[1]);
+    this->addChild("layer_1");
+    this->addChild("layer_2");
   }
 
  private:

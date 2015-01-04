@@ -4,15 +4,17 @@
 namespace PS {
 namespace CXXNET {
 
-// put parameter server related data structure here, because it requires c++11
-// features, which is not supported by low version cuda
+// put parameter server related data structure here to separate the compilation
+// dependency
 struct SyncData {
   // the key type can be only uint32 or uint64
-  SyncData(KVVector<uint32, mshadow::real_t>* ptr, size_t n)
-      : sync_(ptr), keys_(n), buf_(n) { }
-  KVVectorPtr<uint32, mshadow::real_t> sync_;
-  SArray<uint32> keys_;
-  SArray<real_t> buf_;
+  typedef uint32 key_t;
+  typedef mshadow::real_t real_t;
+  SyncData(KVVector<key_t, real_t>* ptr, size_t n)
+      : data(ptr), keys(n), buf(n) { }
+  KVVectorPtr<key_t, real_t> data;
+  SArray<key_t> key;
+  SArray<real_t> buf;
 };
 
 } // namespace CXXNET

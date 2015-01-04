@@ -15,10 +15,15 @@ class CxxnetKVVector : public KVVector<K, V> {
     KVVector<K,V>::setValue(msg);
 
     // we need to -1 here because the current task will be finished after
-    // exitting this function
+    // exitting this function.
+    // TODO relax this aggregation to ignore the stragglers
     if (this->taskpool(kWorkerGroup)->countIncomingTask(time) ==
         FLAGS_num_workers - 1) {
-      // aggregated the gradients from all workers, allow for pulling now
+      // TODO in current implementation, each worker pull the aggregated
+      // gradient back. in the future,  call the update function here, so that
+      // worker pull the updated weights.
+
+      // the gradients have been aggregated, allow workers to pull now
       this->taskpool(kWorkerGroup)->finishIncomingTask(time+1);
     }
   }
