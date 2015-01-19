@@ -1,0 +1,14 @@
+package PS.Minerva;
+import "proto/config.proto";
+
+message Config {
+  // optional DataConfig input = 1;
+  optional string args = 2;
+}
+
+message Call {
+  enum Command {
+    RUN = 1;
+  }
+  required Command cmd = 1;
+}

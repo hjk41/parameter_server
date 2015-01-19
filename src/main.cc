@@ -6,7 +6,7 @@ DEFINE_bool(log_instant, false, "disable buffer of glog");
 #include "system/app.h"
 #include "linear_method/linear_method.h"
 #include "graph_partition/graph_partition.h"
-#include "cxxnet/cxxnet.h"
+//#include "cxxnet/cxxnet.h"
 namespace PS {
 
 AppPtr App::create(const AppConfig& conf) {
@@ -17,8 +17,10 @@ AppPtr App::create(const AppConfig& conf) {
     CHECK(ptr);
   } else if (conf.has_graph_partition()) {
     ptr = GP::GraphPartition::create(conf.graph_partition());
+  } else if (conf.has_minerva()) {
+    ptr = MinervaPs::create(conf.minerva());
   } else if (conf.has_cxxnet()) {
-    ptr = CXXNET::Cxxnet::create(conf.cxxnet());
+    //ptr = CXXNET::Cxxnet::create(conf.cxxnet());
   } else {
     CHECK(false) << "unknown app: " << conf.DebugString();
   }

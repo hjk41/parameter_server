@@ -54,24 +54,37 @@ GP_OBJS = $(GP_SRCS:.cc=.o)
 $(LIB)/libgp.a: $(GP_OBJS)
 	ar crv $@ $(GP_OBJS)
 
-### cxxnet
-CN_ORIG_O = layer_cpu.o updater_cpu.o nnet_cpu.o data.o layer_gpu.o  updater_gpu.o nnet_gpu.o
-CN_ORIG_OBJS = $(addprefix ../plugin/cxxnet/, $(CN_ORIG_O))
-CN_SRCS = $(addprefix cxxnet/, $(cxxnet_srcs))
+### minerva
+MINERVA_PS_LIB = $(LIB)/libminervaps.a
+MINERVA_INC = /home/hct/minerva/minerva
+MINERVA_SO = /home/hct/minerva/debug/lib/libminerva.so
 
-CN_OBJS = $(CN_SRCS:.cc=.o)
-$(LIB)/libcxxnet.a: $(CN_OBJS) $(CN_ORIG_OBJS)
-	ar crv $@ $(CN_OBJS) $(CN_ORIG_OBJS)
+MI_SRCS = $(addprefix minerva/, $(minerva_srcs))
+MI_OBJS = $(MI_SRCS:.cc=.o)
+$(MINERVA_PS_LIB): $(MI_OBJS)
+	ar crv $@ $(MI_OBJS)
+
+### cxxnet
+#CN_ORIG_O = layer_cpu.o updater_cpu.o nnet_cpu.o data.o layer_gpu.o  updater_gpu.o nnet_gpu.o
+#CN_ORIG_OBJS = $(addprefix ../plugin/cxxnet/, $(CN_ORIG_O))
+#CN_SRCS = $(addprefix cxxnet/, $(cxxnet_srcs))
+
+#CN_OBJS = $(CN_SRCS:.cc=.o)
+#$(LIB)/libcxxnet.a: $(CN_OBJS) $(CN_ORIG_OBJS)
+#	ar crv $@ $(CN_OBJS) $(CN_ORIG_OBJS)
 
 CFLAGS += -I../plugin/cxxnet/src -I../plugin/cxxnet/mshadow \
-	-I/home/work/cuda-5.5/include \
+	-I$(MINERVA_INC) \
+	-I/home/hct/minerva/deps/include \
+	-I/usr/local/cuda-6.5/include \
 	-msse3 -Wno-unknown-pragmas -funroll-loops -fopenmp \
 	-DCXXNET_USE_OPENCV=1 -I/home/limu/include \
 	-DMSHADOW_USE_MKL=0 -DMSHADOW_USE_CBLAS=1
 
-LDFLAGS += -L/usr/lib64/atlas/ -lcblas \
+LDFLAGS += -lblas \
+	$(MINERVA_SO) \
 	`pkg-config --cflags --libs opencv` \
-	-L/home/work/cuda-5.5/lib64 -lcudart -lcublas -lcurand
+	-L/usr/local/cuda-6.5/lib64 -lcudart -lcublas -lcurand
 
 ### dependencies
 # $(SRCS) $(addsuffix .cc, $(addprefix test/, $(TESTS)))
@@ -80,7 +93,8 @@ DEPS = $(ALL_SRCS:.cc=.d)
 -include $(DEPS)
 
 ### rules
-LIBS = $(LIB)/liblm.a $(LIB)/libgp.a $(LIB)/libcxxnet.a \
+#LIBS = $(LIB)/liblm.a $(LIB)/libgp.a $(LIB)/libcxxnet.a 
+LIBS = $(LIB)/liblm.a $(LIB)/libgp.a $(MINERVA_PS_LIB)\
  $(LIB)/libps.a
 
 test: $(addprefix $(BIN)/, $(TESTS))
