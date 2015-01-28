@@ -1,1 +1,1 @@
-minerva_srcs = mnist_mlp.cc
+minerva_srcs = main.cc

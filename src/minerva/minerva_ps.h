@@ -15,35 +15,6 @@ namespace PS
         class MinervaWorker;
         class MinervaServer;
 
-        template <typename K, typename V>
-        class MinervaKVVector : public KVVector<K, V> {
-            void setValue(const MessagePtr& msg) {
-                int chl = msg->task.key_channel();
-                int time = msg->task.time();
-                if (time != last_time) {
-                    this->val_[chl].setZero();
-                }
-
-                KVVector<K, V>::setValue(msg);
-
-                // we need to -1 here because the current task will be finished after
-                // exitting this function.
-                // TODO relax this aggregation to ignore the stragglers
-                if (this->taskpool(kWorkerGroup)->countIncomingTask(time) ==
-                    FLAGS_num_workers - 1) {
-                    // TODO in current implementation, each worker pull the aggregated
-                    // gradient back. in the future,  call the update function here, so that
-                    // worker pull the updated weights.
-
-                    // the gradients have been aggregated, allow workers to pull now
-                    this->taskpool(kWorkerGroup)->finishIncomingTask(time + 1);
-                }
-            }
-        private:
-            int last_time = -1;
-        };
-
-
         class MinervaApp : public App
         {
         public:
@@ -85,6 +56,7 @@ namespace PS
             virtual void process(const MessagePtr& msg) {}
         protected:
             Config conf_;
+            std::vector<KVVector<uint64, float> *> model_;
         };
 
 
